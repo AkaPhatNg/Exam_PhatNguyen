@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SIS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Tùy chỉnh màu sắc Dark Mode nhẹ */
+        .bg-dark-container {
+            background-color: #1f2937; /* Gray-800 */
+        }
+        .text-dark-primary {
+            color: #f3f4f6; /* Gray-100 */
+        }
+        .text-dark-secondary {
+            color: #9ca3af; /* Gray-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen p-8 font-sans">
+<div class="max-w-7xl mx-auto space-y-12">
+
+    <header class="flex justify-between items-center pb-4 border-b border-gray-700">
+        <h1 class="text-4xl font-extrabold text-violet-400 tracking-tight">Hệ Thống Thông Tin Sinh Viên (SIS)</h1>
+        <div class="space-x-4">
+            <a href="/student/add" class="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl shadow-lg transition transform hover:scale-105 font-semibold">
+                <i class="fa-solid fa-user-plus mr-2"></i>Thêm Sinh Viên
+            </a>
+            <a href="/score/add" class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl shadow-lg transition transform hover:scale-105 font-semibold">
+                <i class="fa-solid fa-file-pen mr-2"></i>Thêm Điểm
+            </a>
+        </div>
+    </header>
+
+    <section class="bg-dark-container rounded-2xl shadow-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <h3 class="text-2xl font-bold text-dark-primary"><i class="fa-solid fa-list-check mr-3 text-teal-400"></i>Bảng Điểm Chi Tiết</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-800 text-gray-400 uppercase text-sm font-semibold tracking-wider">
+                <tr>
+                    <th class="p-4 w-1/4">Sinh Viên</th>
+                    <th class="p-4 w-1/5">Môn Học</th>
+                    <th class="p-4 text-center">Điểm 1</th>
+                    <th class="p-4 text-center">Điểm 2</th>
+                    <th class="p-4 text-center">Xếp Loại</th>
+                    <th class="p-4 text-center">Thao Tác</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 text-dark-primary">
+                <tr th:each="item : ${scores}" class="hover:bg-gray-700 transition duration-150">
+                    <td class="p-4">
+                        <div class="font-bold text-violet-400" th:text="${item.student.student_code}"></div>
+                        <div class="text-sm text-dark-secondary" th:text="${item.student.full_name}"></div>
+                    </td>
+                    <td class="p-4"><span class="bg-gray-700 text-teal-400 text-xs px-3 py-1 rounded-lg font-medium" th:text="${item.subject.subject_name}"></span></td>
+                    <td class="p-4 text-center font-mono" th:text="${item.score1}"></td>
+                    <td class="p-4 text-center font-mono" th:text="${item.score2}"></td>
+                    <td class="p-4 text-center">
+                            <span th:text="${item.letterGrade}"
+                                  th:classappend="${item.letterGrade == 'A' ? 'bg-green-700 text-white' :
+                                                   (item.letterGrade == 'B' ? 'bg-blue-700 text-white' :
+                                                   (item.letterGrade == 'D' ? 'bg-yellow-700 text-white' : 'bg-red-700 text-white'))}"
+                                  class="px-4 py-1.5 rounded-full text-sm font-extrabold min-w-[40px] inline-block shadow-md">
+                            </span>
+                    </td>
+                    <td class="p-4 text-center space-x-3">
+                        <a th:href="@{/score/edit/{id}(id=${item.student_score_id})}" class="text-violet-400 hover:text-violet-300 transform hover:scale-110 transition" title="Chỉnh sửa Điểm">
+                            <i class="fa-solid fa-pen-to-square text-lg"></i>
+                        </a>
+                        <a th:href="@{/score/delete/{id}(id=${item.student_score_id})}"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa điểm này không?')"
+                           class="text-red-500 hover:text-red-400 transform hover:scale-110 transition" title="Xóa Điểm">
+                            <i class="fa-solid fa-trash text-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="bg-dark-container rounded-2xl shadow-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <h3 class="text-2xl font-bold text-dark-primary"><i class="fa-solid fa-users-gear mr-3 text-violet-400"></i>Danh Sách Quản Lý Sinh Viên</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-800 text-gray-400 uppercase text-sm font-semibold tracking-wider">
+                <tr>
+                    <th class="p-4">ID</th>
+                    <th class="p-4">Mã Sinh Viên</th>
+                    <th class="p-4">Họ và Tên</th>
+                    <th class="p-4">Địa Chỉ</th>
+                    <th class="p-4 text-center">Thao Tác</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 text-dark-primary">
+                <tr th:each="s : ${students}" class="hover:bg-gray-700 transition duration-150">
+                    <td class="p-4 text-dark-secondary" th:text="${s.student_id}"></td>
+                    <td class="p-4 font-extrabold text-violet-400" th:text="${s.student_code}"></td>
+                    <td class="p-4 text-dark-primary" th:text="${s.full_name}"></td>
+                    <td class="p-4 text-dark-secondary" th:text="${s.address}"></td>
+                    <td class="p-4 text-center">
+                        <a th:href="@{/student/delete/{id}(id=${s.student_id})}"
+                           onclick="return confirm('CẢNH BÁO: Việc xóa sinh viên này sẽ xóa TẤT CẢ điểm số liên quan. Bạn có muốn tiếp tục?')"
+                           class="bg-red-800 text-white hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 shadow-md">
+                            <i class="fa-solid fa-user-xmark mr-1"></i> Xóa Sinh Viên
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Sinh Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tùy chỉnh màu sắc chính cho một cái nhìn độc đáo */
+        .color-primary {
+            background-color: #06b6d4; /* Cyan-500 */
+        }
+        .color-primary-hover {
+            background-color: #0891b2; /* Cyan-600 */
+        }
+    </style>
+</head>
+<body class="bg-blue-gray-50 h-screen flex items-center justify-center font-sans p-4">
+<div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-200">
+    <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-8 tracking-tight">
+        👨‍🎓 <span th:text="${student.student_id == null ? 'Thêm Sinh Viên Mới' : 'Cập Nhật Sinh Viên'}"></span>
+    </h2>
+
+    <form th:action="@{/student/save}" th:object="${student}" method="post" class="space-y-6">
+
+        <input type="hidden" th:field="*{student_id}">
+
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Mã Sinh Viên</label>
+            <input type="text" th:field="*{student_code}" required placeholder="VD: 2007A1234"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition duration-150 ease-in-out shadow-sm">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Họ và Tên</label>
+            <input type="text" th:field="*{full_name}" required placeholder="VD: Nguyễn Văn A"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition duration-150 ease-in-out shadow-sm">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Địa Chỉ</label>
+            <input type="text" th:field="*{address}" placeholder="VD: Hà Nội"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition duration-150 ease-in-out shadow-sm">
+        </div>
+
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="flex-1 color-primary text-white py-3 rounded-xl color-primary-hover font-bold text-lg transition duration-300 ease-in-out transform hover:scale-[1.02] shadow-md">
+                ✔️ Lưu Thông Tin
+            </button>
+            <a href="/" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl text-center hover:bg-gray-200 font-bold text-lg transition duration-300 ease-in-out transform hover:scale-[1.02]">
+                ❌ Hủy Bỏ
+            </a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
